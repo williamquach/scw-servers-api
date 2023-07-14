@@ -1,0 +1,246 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "contact": {}
+    },
+    "paths": {
+        "/servers": {
+            "get": {
+                "description": "Find all servers",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Servers"
+                ],
+                "summary": "Find all servers",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/responses.ServerResponse"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/responses.APIError"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Create a server",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Servers"
+                ],
+                "summary": "Create a server",
+                "parameters": [
+                    {
+                        "description": "Server",
+                        "name": "server",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requests.CreateServerRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ServerResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/responses.APIError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/responses.APIError"
+                        }
+                    }
+                }
+            }
+        },
+        "/servers/{id}": {
+            "get": {
+                "description": "Find server by ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Servers"
+                ],
+                "summary": "Find server by ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Server ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ServerResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/responses.APIError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/responses.APIError"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "domain.ServerStatus": {
+            "type": "string",
+            "enum": [
+                "STARTING",
+                "RUNNING",
+                "STOPPING",
+                "STOPPED"
+            ],
+            "x-enum-varnames": [
+                "Starting",
+                "Running",
+                "Stopping",
+                "Stopped"
+            ]
+        },
+        "domain.ServerType": {
+            "type": "string",
+            "enum": [
+                "SMALL",
+                "MEDIUM",
+                "LARGE"
+            ],
+            "x-enum-varnames": [
+                "Small",
+                "Medium",
+                "Large"
+            ]
+        },
+        "requests.CreateServerRequest": {
+            "type": "object",
+            "required": [
+                "name",
+                "status",
+                "type"
+            ],
+            "properties": {
+                "name": {
+                    "description": "Name of the server\nexample: ESGI",
+                    "type": "string"
+                },
+                "status": {
+                    "description": "Status of the server\nexample: STARTED | RUNNING | STOPPING | STOPPED",
+                    "enum": [
+                        "STARTING",
+                        "RUNNING",
+                        "STOPPING",
+                        "STOPPED"
+                    ],
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/domain.ServerStatus"
+                        }
+                    ]
+                },
+                "type": {
+                    "description": "Type of the server\nexample: SMALL | MEDIUM | LARGE",
+                    "enum": [
+                        "SMALL",
+                        "MEDIUM",
+                        "LARGE"
+                    ],
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/domain.ServerType"
+                        }
+                    ]
+                }
+            }
+        },
+        "responses.APIError": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "Code of the error\nexample: internal_server_error",
+                    "type": "string"
+                },
+                "context": {
+                    "description": "Context of the error\nexample: {\"body\": \"body of the request\"}",
+                    "type": "object",
+                    "additionalProperties": true
+                },
+                "error": {
+                    "description": "OriginalError is the original error\nexample: Error parsing JSON",
+                    "type": "string"
+                },
+                "message": {
+                    "description": "Message of the error\nexample: Internal server error",
+                    "type": "string"
+                },
+                "status": {
+                    "description": "Status of the error\nexample: 500",
+                    "type": "integer"
+                }
+            }
+        },
+        "responses.ServerResponse": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "description": "ID unique identifier of the server\nexample: 1",
+                    "type": "integer"
+                },
+                "name": {
+                    "description": "Name of the server\nexample: ESGI",
+                    "type": "string"
+                },
+                "status": {
+                    "description": "Status of the server\nexample: STARTED | RUNNING | STOPPING | STOPPED",
+                    "type": "string"
+                },
+                "type": {
+                    "description": "Type of the server\nexample: SMALL | MEDIUM | LARGE",
+                    "type": "string"
+                }
+            }
+        }
+    }
+}
