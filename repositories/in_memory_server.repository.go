@@ -9,7 +9,7 @@ type InMemoryServerRepository struct {
 	Servers []models.ServerModel
 }
 
-func (repository InMemoryServerRepository) Create(createServer domain.CreateServer) (*domain.Server, error) {
+func (repository *InMemoryServerRepository) Create(createServer domain.CreateServer) (*domain.Server, error) {
 	server := models.ServerModel{
 		Name:   createServer.Name,
 		Type:   createServer.Type,
@@ -17,15 +17,16 @@ func (repository InMemoryServerRepository) Create(createServer domain.CreateServ
 	}
 
 	repository.Servers = append(repository.Servers, server)
+
 	return server.ToDomain(), nil
 }
 
-func (repository InMemoryServerRepository) FindAll() ([]domain.Server, error) {
+func (repository InMemoryServerRepository) FindAll() ([]*domain.Server, error) {
 	foundServers := repository.Servers
 
-	var servers []domain.Server
+	var servers []*domain.Server
 	for _, server := range foundServers {
-		servers = append(servers, *server.ToDomain())
+		servers = append(servers, server.ToDomain())
 	}
 
 	return servers, nil

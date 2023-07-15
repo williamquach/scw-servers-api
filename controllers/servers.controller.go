@@ -74,7 +74,7 @@ func (s *ServerController) CreateServer(c *gin.Context) {
 // @Router /servers [get]
 // FindAllServers Finds all servers
 func (s *ServerController) FindAllServers(c *gin.Context) {
-	servers, err := s.FindAllServersUseCase.Execute()
+	foundServers, err := s.FindAllServersUseCase.Execute()
 	if err != nil {
 		responses.NewAPIError().
 			WithMessage("Error getting all servers").
@@ -85,10 +85,11 @@ func (s *ServerController) FindAllServers(c *gin.Context) {
 		return
 	}
 
-	var serversResponse []responses.ServerResponse
-	for _, server := range servers {
-		serversResponse = append(serversResponse, server.ToResponse())
+	serversResponse := make([]*responses.ServerResponse, len(foundServers))
+	for index, server := range foundServers {
+		serversResponse[index] = server.ToResponse()
 	}
+
 	utils.ProduceSuccessAPIResponse(c, serversResponse)
 }
 

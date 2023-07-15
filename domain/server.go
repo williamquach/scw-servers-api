@@ -9,8 +9,8 @@ type Server struct {
 	Status ServerStatus `json:"status"`
 }
 
-func (s Server) ToResponse() responses.ServerResponse {
-	return responses.ServerResponse{
+func (s Server) ToResponse() *responses.ServerResponse {
+	return &responses.ServerResponse{
 		ID:     s.ID,
 		Name:   s.Name,
 		Type:   string(s.Type),

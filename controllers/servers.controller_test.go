@@ -4,9 +4,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"github.com/gin-gonic/gin"
-	"github.com/stretchr/testify/assert"
-	"gorm.io/gorm"
 	"log"
 	"net/http"
 	"net/http/httptest"
@@ -16,6 +13,10 @@ import (
 	"servers_api/repositories"
 	"servers_api/usecases"
 	"testing"
+
+	"github.com/gin-gonic/gin"
+	"github.com/stretchr/testify/assert"
+	"gorm.io/gorm"
 )
 
 var servers = []models.ServerModel{
@@ -47,9 +48,9 @@ var servers = []models.ServerModel{
 func setupSuite(tb testing.TB) (func(tb testing.TB), *gin.Engine) {
 	serverRepository := repositories.InMemoryServerRepository{Servers: servers}
 
-	createServerUseCase := usecases.CreateServerUseCase{ServerRepository: serverRepository}
-	findAllServersUseCase := usecases.FindAllServersUseCase{ServerRepository: serverRepository}
-	findServerByIDUseCase := usecases.FindServerByIDUseCase{ServerRepository: serverRepository}
+	createServerUseCase := usecases.CreateServerUseCase{ServerRepository: &serverRepository}
+	findAllServersUseCase := usecases.FindAllServersUseCase{ServerRepository: &serverRepository}
+	findServerByIDUseCase := usecases.FindServerByIDUseCase{ServerRepository: &serverRepository}
 	serverController := ServerController{
 		CreateServerUseCase:   createServerUseCase,
 		FindAllServersUseCase: findAllServersUseCase,

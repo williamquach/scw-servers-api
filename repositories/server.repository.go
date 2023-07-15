@@ -6,6 +6,6 @@ import (
 
 type ServerRepository interface {
 	Create(createServer domain.CreateServer) (*domain.Server, error)
-	FindAll() ([]domain.Server, error)
+	FindAll() ([]*domain.Server, error)
 	FindByID(id uint) (*domain.Server, error)
 }

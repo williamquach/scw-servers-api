@@ -27,7 +27,7 @@ func (repository GORMServerRepository) Create(createServer domain.CreateServer) 
 	return server.ToDomain(), nil
 }
 
-func (repository GORMServerRepository) FindAll() ([]domain.Server, error) {
+func (repository GORMServerRepository) FindAll() ([]*domain.Server, error) {
 	var foundServers []models.ServerModel
 
 	result := repository.DB.Find(&foundServers)
@@ -36,9 +36,9 @@ func (repository GORMServerRepository) FindAll() ([]domain.Server, error) {
 		return nil, result.Error
 	}
 
-	var servers []domain.Server
-	for _, server := range foundServers {
-		servers = append(servers, *server.ToDomain())
+	servers := make([]*domain.Server, len(foundServers))
+	for index, server := range foundServers {
+		servers[index] = server.ToDomain()
 	}
 
 	return servers, nil
